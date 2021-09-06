@@ -1,8 +1,8 @@
 <template>
-    <b-navbar ref="navbar" variant="dark" type="dark" fixed='top'>
+    <b-navbar ref="navbar" type="dark" fixed='top'>
         <div class="div-sep-20per" />
         <b-navbar-nav>
-            <b-navbar-brand href="#">
+            <b-navbar-brand class="no-select">
                 <img src="@a/logo.png" style="height: 2rem; width: 2rem" class="d-inline-block align-top" alt="Kitten">
                 Pastelería
             </b-navbar-brand>
@@ -29,14 +29,24 @@ export default {
         }
     },
     mounted() {
-        window.addEventListener('scroll', (e) => {
-            let scroll = e.target.documentElement.scrollTop
-            console.log('El menu esta en: ' + document.getElementById('menu').getBoundingClientRect().top + '\ny estoy en: ' + scroll)
-            if (document.getElementById('menu').getBoundingClientRect().top <= 0) {
-                this.navbarindex = 1
-            } else {
-                this.navbarindex = 0
-            }
+        window.addEventListener('scroll', () => {
+            try {
+                let navbar = this.$refs.navbar.$el
+                if (window.scrollY > 100) {
+                    navbar.classList.remove('navbar-dark')
+                    navbar.classList.add('bg-warning')
+                    navbar.classList.add('navbar-light')
+                } else {
+                    navbar.classList.remove('bg-warning')
+                    navbar.classList.remove('navbar-light')
+                    navbar.classList.add('navbar-dark')
+                }
+                if (document.getElementById('menu').getBoundingClientRect().top <= 0) {
+                    this.navbarindex = 1
+                } else {
+                    this.navbarindex = 0
+                }
+            } catch (err) { console.log('watafac' + err) }
         });
     },
     methods: {
@@ -45,11 +55,11 @@ export default {
             switch (id) {
                 case 0:
                     elem = document.getElementById('inicio')
-                    elem.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    elem.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     break
                 case 1:
                     elem = document.getElementById('menu')
-                    elem.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    elem.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     break
                 default:
                     break
@@ -58,3 +68,9 @@ export default {
     }
 }
 </script>
+
+<style scope>
+.navbar {
+    transition: all 0.5s;
+}
+</style>

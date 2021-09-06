@@ -1,7 +1,9 @@
 <template>
-    <div style="text-align: center">
-        <b-row v-bind:key="'fila_cartas_' + key1" v-for="(nlinea, key1) in range(srcs.length/cantidadPorLinea)" cantidadPorLinea>
-            <b-col v-bind:key="'columna_cartas_' + (key2)" v-for="(titulo, key2) in titulos.slice(cantidadPorLinea * nlinea, cantidadPorLinea*(nlinea + 1))">
+    <b-container>
+        <b-row align-h="center" v-bind:key="'fila_cartas_' + key1" v-for="(nlinea, key1) in range(srcs.length/cantidadPorLinea)">
+            <b-col cols="3" v-bind:key="'columna_cartas_' + (key2)" v-for="(titulo, key2) in titulos.slice(cantidadPorLinea * nlinea, cantidadPorLinea*(nlinea + 1))">
+                <!-- QUITAR LA CLASE dim-img-card PARA QUE LAS CARTAS TENGAN UN TAMAÑO DEPENDIENDO DE CUANTAS HAY EN UNA FILA -->
+                <!-- O CAMBIAR EL TAMAÑO DE CADA UNA EN EL custom-css.css -->
                 <b-card
                     :title="titulos[cantidadPorLinea * nlinea + key2]"
                     :img-src="srcs[cantidadPorLinea * nlinea + key2]"
@@ -15,7 +17,7 @@
                 </b-card>
             </b-col>
         </b-row>
-    </div>
+    </b-container>
 </template>
 
 <script>

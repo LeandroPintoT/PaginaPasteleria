@@ -1,11 +1,13 @@
 body {
     margin: 0px;
+    background-image: '@a/media/fondo-pasteles.jpg';
 }
 
 .video-banner {
-    max-height: 100vh;
-    height: 100vh;
+    max-height: 101vh;
+    height: 101vh;
     width: 100vw;
+    transform: translate(-1px, -1px)
 }
 
 .text-block {
@@ -40,4 +42,13 @@ body {
 
 .dim-img-card {
     max-width: 20rem;
+}
+
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

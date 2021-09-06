@@ -1,13 +1,13 @@
 <template>
     <div>
         <Header />
-        <video-con-texto :videoSrc="require('@a/media/kimetsu.mp4')" />
+        <div style="">
+            <video-con-texto :videoSrc="require('@a/media/kimetsu.mp4')" />
+        </div>
         <div>
             <div id="menu">
-                <h2>Menú</h2>
-                <b-container>
-                    <fila-cards :titulos="titulosCards" :descs="descripcionesCards" :srcs="srcsCards" :cantidadPorLinea="cantidadCardsPorLinea" />
-                </b-container>
+                <h1>Menú</h1>
+                <fila-cards :titulos="titulosCards" :descs="descripcionesCards" :srcs="srcsCards" :cantidadPorLinea="cantidadCardsPorLinea" />
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@ export default {
                     require('@a/media/ejemplo3.jpg'),
                     require('@a/media/ejemplo4.jpg')
                 ],
-            cantidadCardsPorLinea: 1
+            cantidadCardsPorLinea: 4    // Maximo 4 si se mantiene la columna con col="3" porque son 12 columnas en total
         }
     },
     created() {
@@ -62,7 +62,8 @@ export default {
 </script>
 
 <style scoped>
-h2 {
+h1 {
     font-family: "Sofia", sans-serif;
+    padding: 5rem 0 3rem 0;
 }
 </style>
