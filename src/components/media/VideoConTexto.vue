@@ -3,8 +3,8 @@
         <video-background :src="videoSrc" class="video-banner" loop></video-background>
         <div class="text-block tb-center">
             <div class="center-item-vert">
-                <p class="prueba">Aquí iria algun texto de bienvenida, aunque también se puede quitar y dejar solo
-                    el video si es que está bien editado y tiene letras o imagenes que quieres que se vean.</p>
+                <p class="prueba">{{ dataBtn.textoCentral }}</p>
+                <b-button v-if="dataBtn.activo" @click="dataBtn.funcion" :variant="dataBtn.variante">{{ dataBtn.texto }}</b-button>
             </div>
         </div>
     </div>
@@ -14,7 +14,8 @@
 export default {
     name: 'VideoConTexto',
     props: {
-        videoSrc: String
+        videoSrc: String,
+        dataBtn: Object,
     },
     components: {
         

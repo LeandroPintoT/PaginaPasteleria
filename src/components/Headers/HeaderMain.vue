@@ -4,14 +4,13 @@
         <b-navbar-nav>
             <b-navbar-brand class="no-select">
                 <img src="@a/logo.png" style="height: 2rem; width: 2rem" class="d-inline-block align-top" alt="Kitten">
-                Pastelería
+                Cuarto Dulce
             </b-navbar-brand>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto">
             <b-nav-item @click="deslizar(0)" class="btn-navbar" :active="navbarindex == 0">Inicio</b-nav-item>
-            <b-nav-item @click="deslizar(1)" class="btn-navbar" :active="navbarindex == 1">Menu</b-nav-item>
-            <b-nav-item @click="deslizar(2)" class="btn-navbar" :active="navbarindex == 2">Agendar Pedido</b-nav-item>
-            <b-nav-item @click="deslizar(3)" class="btn-navbar" :active="navbarindex == 3">Contacto</b-nav-item>
+            <b-nav-item @click="deslizar(1)" class="btn-navbar" :active="navbarindex == 1">Destacados</b-nav-item>
+            <b-nav-item @click="deslizar(2)" class="btn-navbar" :active="navbarindex == 2">Contacto</b-nav-item>
         </b-navbar-nav>
         <div class="div-sep-20per" />
     </b-navbar>
@@ -19,7 +18,7 @@
 
 <script>
 export default {
-    name: 'Header',
+    name: 'headermain',
     props: {
         //msg: String
     },
@@ -31,6 +30,7 @@ export default {
     mounted() {
         window.addEventListener('scroll', () => {
             try {
+                /* TRANSPARENCIA DE LA NAVBAR */
                 let navbar = this.$refs.navbar.$el
                 if (window.scrollY > 100) {
                     navbar.classList.remove('navbar-dark')
@@ -41,12 +41,18 @@ export default {
                     navbar.classList.remove('navbar-light')
                     navbar.classList.add('navbar-dark')
                 }
-                if (document.getElementById('menu').getBoundingClientRect().top <= 0) {
+
+                /* REVISA LA POSICION DE LA PANTALLA Y CAMBIA LA SECCION ACTIVA */
+                let menu = document.getElementById('menu').getBoundingClientRect()
+                let contacto = document.getElementById('contacto').getBoundingClientRect()
+                if (menu.top <= 400 && contacto.top > 400) {
                     this.navbarindex = 1
+                } else if (contacto.top <= 400) {
+                    this.navbarindex = 2
                 } else {
                     this.navbarindex = 0
                 }
-            } catch (err) { console.log('watafac' + err) }
+            } catch (err) { err }
         });
     },
     methods: {
@@ -61,6 +67,10 @@ export default {
                     elem = document.getElementById('menu')
                     elem.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     break
+                case 2:
+                    elem = document.getElementById('contacto')
+                    elem.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    break
                 default:
                     break
             }
@@ -71,6 +81,6 @@ export default {
 
 <style scope>
 .navbar {
-    transition: all 0.5s;
+    transition: all 0.3s;
 }
 </style>

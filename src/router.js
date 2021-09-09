@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Principal from '@/components/Principal.vue'
+import Principal from '@c/Principal.vue'
+import Agendar from '@c/Agendar.vue'
 
 Vue.use(VueRouter)
 
@@ -8,11 +9,13 @@ const routes = [
     {
         path: '/',
         name: 'principal',
-        component: Principal,
-        meta: {
-            guest: true
-        }
+        component: Principal
     },
+    {
+        path: '/agendar',
+        name: 'agendar',
+        component: Agendar
+    }
 ]
 
 const router = new VueRouter({

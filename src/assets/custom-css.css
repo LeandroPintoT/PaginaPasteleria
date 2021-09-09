@@ -1,6 +1,10 @@
 body {
     margin: 0px;
-    background-image: '@a/media/fondo-pasteles.jpg';
+    background-image: url('./media/fondo-hojas.png');
+}
+
+.texto-rojo {
+    color: #dc3545;
 }
 
 .video-banner {
@@ -41,7 +45,10 @@ body {
 }
 
 .dim-img-card {
+    min-width: 20rem;
     max-width: 20rem;
+    min-height: 22rem;
+    max-height: 22rem;
 }
 
 .no-select {
@@ -51,4 +58,15 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.fondo {
+    /*background: rgba(0, 0, 0, 0.75);*/
+}
+
+.boton-grande {
+    min-width: 40%;
+    max-width: 40%;
+    font-size: 1.5rem !important;
+    margin: 1rem 1rem 1rem 1rem;
 }

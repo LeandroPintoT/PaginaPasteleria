@@ -9,6 +9,8 @@
                     :img-src="srcs[cantidadPorLinea * nlinea + key2]"
                     :img-alt="'imgejemplo' + cantidadPorLinea * nlinea + key2"
                     img-top
+                    img-height="200"
+                    img-width="100"
                     class="mb-2 dim-img-card"
                 >
                     <b-card-text>
@@ -17,6 +19,7 @@
                 </b-card>
             </b-col>
         </b-row>
+        <b-button variant="primary" class="boton-grande" @click="irMenuCompleto">Ir al Menú Completo</b-button>
     </b-container>
 </template>
 
@@ -41,6 +44,9 @@ export default {
         
     },
     methods: {
+        irMenuCompleto () {
+            console.log('Moviendose al menu completo...')
+        },
         range(start, stop, step) {
             if (typeof stop == 'undefined') {
                 // one param defined
