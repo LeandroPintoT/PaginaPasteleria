@@ -2,6 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Principal from '@c/Principal.vue'
 import Agendar from '@c/Agendar.vue'
+import Menu from '@c/Menu.vue'
+import Nosotros from '@c/Nosotros.vue'
 
 Vue.use(VueRouter)
 
@@ -15,12 +17,27 @@ const routes = [
         path: '/agendar',
         name: 'agendar',
         component: Agendar
+    },
+    {
+        path: '/menu',
+        name: 'menu',
+        component: Menu
+    },
+    {
+        path: '/nosotros',
+        name: 'nosotros',
+        component: Nosotros
+    },
+    {
+        path: '*',
+        name: 'all',
+        component: Principal
     }
 ]
 
 const router = new VueRouter({
-    routes,
-    mode: "history"
+    mode: "history",
+    routes
 })
 
 // PARA AÑADIR SOPORTE PARA REQUERIMIENTO DE LOGUEO

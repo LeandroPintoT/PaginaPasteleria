@@ -1,12 +1,12 @@
 <template>
     <div>
-        <header-main />
-        <div style="">
-            <video-con-texto :videoSrc="require('@a/media/kimetsu.mp4')" :dataBtn="dataBtn" />
+        <header-main :navbarindex="0" :principal="true" />
+        <div>
+            <video-con-texto :videoSrc="require('@a/media/vid-tenedor.mp4')" :dataBtn="dataBtn" />
         </div>
         <div>
             <h1 id="menu" class="fondo">Productos destacados</h1>
-            <fila-cards :titulos="titulosCards" :descs="descripcionesCards" :srcs="srcsCards" :cantidadPorLinea="cantidadCardsPorLinea" />
+            <fila-cards :data="dataCards" :mostrarBtn="true" />
         </div>
         <div>
             <h1 id="contacto" class="fondo">Contáctanos</h1>
@@ -16,10 +16,11 @@
 </template>
 
 <script>
-import VideoConTexto from './media/VideoConTexto.vue'
-import HeaderMain from './Headers/HeaderMain.vue'
-import FilaCards from './FilaCards.vue'
-import Contacto from './Contacto.vue'
+import VideoConTexto from './Partes/VideoConTexto.vue'
+import HeaderMain from './Partes/Header.vue'
+import FilaCards from './Partes/FilaCards.vue'
+import Contacto from './Partes/Contacto.vue'
+import axios from 'axios'
 
 export default {
     name: 'Principal',
@@ -31,40 +32,45 @@ export default {
     },
     data() {
         return {
-            titulosCards: [
-                    'Ejemplo 1',
-                    'Ejemplo 2',
-                    'Ejemplo 3',
-                    //'Ejemplo 4'
-                ],
-            descripcionesCards: [
-                    'Este es el texto del primer ejemplo.',
-                    'Este es el texto del segundo ejemplo, diferente del primero.',
-                    'Y este es el texto del tercer ejemplo.',
-                    //'Este es el texto de la última carta para probar.'
-                ],
-            srcsCards: [
-                    require('@a/media/ejemplo1.jpg'),
-                    require('@a/media/ejemplo2.jpg'),
-                    require('@a/media/ejemplo3.jpg'),
-                    //require('@a/media/ejemplo4.jpg')
-                ],
+            server_ip: process.env.VUE_APP_SERVER_IP,
+            server_port: process.env.VUE_APP_SERVER_PORT,
+            dataCards: {
+                titulosCards: [],
+                desCortaCards: [],
+                desLargaCards: [],
+                srcsCards: [],
+                ingredientes: [],
+                idsCards: [],
+            },
             dataBtn: {
                 activo: true,
                 texto: 'Agendar',
                 textoCentral: 'Aquí iria algun texto de bienvenida, aunque también se puede quitar y dejar solo \
-                               el video si es que está bien editado y tiene letras o imagenes que quieres que se vean.',
+                            el video si es que está bien editado y tiene letras o imagenes que quieres que se vean.',
                 funcion: this.fnBtnVideo,
                 variante: 'success'
             },
-            cantidadCardsPorLinea: 3    // Maximo 4 si se mantiene la columna con col="3" porque son 12 columnas en total
         }
     },
     created() {
         
     },
     mounted() {
-        
+        window.scrollTo(0, 0)
+        axios.get(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/prodsdestacados', {
+                params: {}
+        }).then((res) => {
+            if (res.data.sNumError === '0') {
+                for (let data of res.data['data']) {
+                    this.dataCards.titulosCards.push(data.snombreproducto)
+                    this.dataCards.desCortaCards.push(data.sdescortaproducto)
+                    this.dataCards.desLargaCards.push(data.sdeslargaproducto)
+                    this.dataCards.srcsCards.push(require('@a/' + data.srutaimgproducto))
+                    this.dataCards.ingredientes.push(data.singredientesproducto)
+                    this.dataCards.idsCards.push(data.nidproducto)
+                }
+            }
+        })
     },
     methods: {
         fnBtnVideo () {
@@ -77,7 +83,7 @@ export default {
 
 <style scoped>
 h1 {
-    font-family: "Sofia", sans-serif;
+    font-family: "Architects Daughter", sans-serif;
     text-shadow: 1px 1px 1px #0a0a0a;
     padding: 5rem 0 3rem 0;
     color: green;

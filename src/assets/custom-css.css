@@ -14,6 +14,11 @@ body {
     transform: translate(-1px, -1px)
 }
 
+.dim-logo {
+    height: 2rem;
+    width: 2rem;
+}
+
 .text-block {
     position: absolute !important;
     background-color: rgba(0, 0, 0, 0.75) !important;
@@ -45,8 +50,8 @@ body {
 }
 
 .dim-img-card {
-    min-width: 20rem;
-    max-width: 20rem;
+    min-width: 16rem !important;
+    max-width: 19rem;
     min-height: 22rem;
     max-height: 22rem;
 }
@@ -69,4 +74,121 @@ body {
     max-width: 40%;
     font-size: 1.5rem !important;
     margin: 1rem 1rem 1rem 1rem;
+}
+
+.texto-header {
+    font-family: "Allison", sans-serif;
+    font-size: 2rem;
+    margin: 0 0 0 0;
+}
+
+.centrar {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.texto-titulo {
+    font-size: 2rem;
+    margin: 0 0 0 0;
+}
+
+.centra-txt {
+    text-align: center;
+    background-image: url('./media/fondo-hojas.png');
+}
+
+.quita-margen {
+    margin: 0px 0px 0px 0px !important;
+}
+
+.quita-padding {
+    padding: 0px 0px 0px 0px !important;
+}
+
+.img-detalle-producto {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 0rem 0px 1rem 0px;
+}
+
+.custom-card {
+    cursor: pointer;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+:is(h1, h2, h3, h4, h5, h6) {
+    font-family: "Architects Daughter", sans-serif;
+    text-shadow: 1px 1px 1px #0a0a0a;
+}
+
+@media only screen and (max-width: 1000px) {
+    .center-item-vert {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .text-block {
+        position: absolute !important;
+        background-color: rgba(0, 0, 0, 0.75) !important;
+        color: white !important;
+        padding: 20px !important;
+        text-align: center !important;
+    }
+    
+    .tb-center {
+        top: 20%;
+        bottom: 20%;
+        left: 20%;
+        right: 20%;
+    }
+
+    .div-sep-20per {
+        width: 0%;
+    }
+
+    .texto-header {
+        font-family: "Dancing Script", sans-serif;
+        font-size: 1rem;
+        margin: 0 0 0 0;
+    }
+
+    .dim-logo {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .center-item-vert {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .text-block {
+        position: absolute !important;
+        background-color: rgba(0, 0, 0, 0.75) !important;
+        color: white !important;
+        padding: 20px !important;
+        text-align: center !important;
+    }
+    
+    .tb-center {
+        top: 15%;
+        bottom: 15%;
+        left: 10%;
+        right: 10%;
+    }
+
+    .boton-grande {
+        min-width: 90%;
+        max-width: 90%;
+        font-size: 1.5rem !important;
+        margin: 1rem 1rem 1rem 1rem;
+    }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "TITULO",
+    "name": "cuarto-dulce",
     "version": "0.1.0",
     "private": true,
     "scripts": {
@@ -15,10 +15,12 @@
         "core-js": "^3.6.5",
         "css-loader": "^6.2.0",
         "portal-vue": "^2.1.7",
+        "sweetalert2": "^11.1.5",
         "vue": "^2.6.11",
+        "vue-history-api-fallback": "^1.0.3",
         "vue-responsive-video-background-player": "^1.3.0",
         "vue-router": "^3.5.2",
-        "webpack": "^4.0.0"
+        "webpack": "^4.46.0"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "~4.5.0",
