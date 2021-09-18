@@ -3,22 +3,22 @@
         <b-row align-h="center">
             <!-- QUITAR LA CLASE dim-img-card PARA QUE LAS CARTAS TENGAN UN TAMAÑO DEPENDIENDO DE CUANTAS HAY EN UNA FILA -->
             <!-- O CAMBIAR EL TAMAÑO DE CADA UNA EN EL custom-css.css -->
-            <b-col v-bind:key="'carta_' + key" v-for="(nlinea, key) in range(data.srcsCards.length)">
+            <div v-bind:key="'carta_' + key" v-for="(nlinea, key) in range(data.srcsCards.length)">
                 <b-card
                     :title="data.titulosCards[key]"
-                    :img-src="data.srcsCards[key]"
+                    :img-src="data.srcsCards[key][0]"
                     :img-alt="'imgejemplo' + key"
                     img-top
-                    img-height="200"
-                    img-width="100"
-                    class="mb-2 dim-img-card custom-card"
+                    img-height="270"
+                    img-width="200"
+                    class="mb-2 dim-img-card puntero"
                     @click="funcClick(key)"
                 >
                     <b-card-text>
                         {{ data.desCortaCards[key] }}
                     </b-card-text>
                 </b-card>
-            </b-col>
+            </div>
         </b-row>
         <b-modal
             ref="modal-detalle-prod"
@@ -26,7 +26,7 @@
             hide-header
             centered
             size="lg"
-            content-class="centra-txt"
+            content-class="centra-txt fondo"
         >
             <detalle-producto :data="dataClicked" />
             <br>

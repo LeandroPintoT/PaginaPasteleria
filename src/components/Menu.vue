@@ -42,13 +42,19 @@ export default {
         axios.get(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/productos', {
                 params: {}
         }).then((res) => {
-            for (let data of res.data['data']) {
-                this.dataCards.titulosCards.push(data.snombreproducto)
-                this.dataCards.desCortaCards.push(data.sdescortaproducto)
-                this.dataCards.desLargaCards.push(data.sdeslargaproducto)
-                this.dataCards.srcsCards.push(require('@a/' + data.srutaimgproducto))
-                this.dataCards.ingredientes.push(data.singredientesproducto)
-                this.dataCards.idsCards.push(data.nidproducto)
+            if (res.data.sNumError === '0') {
+                for (let data of res.data['data']) {
+                    let arrutas = []
+                    for (let ruta of data.srutaimgproducto.split(',')) {
+                        arrutas.push(require('@a/media/' + ruta))
+                    }
+                    this.dataCards.titulosCards.push(data.snombreproducto)
+                    this.dataCards.desCortaCards.push(data.sdescortaproducto)
+                    this.dataCards.desLargaCards.push(data.sdeslargaproducto)
+                    this.dataCards.srcsCards.push(arrutas)
+                    this.dataCards.ingredientes.push(data.singredientesproducto)
+                    this.dataCards.idsCards.push(data.nidproducto)
+                }
             }
         })
     },

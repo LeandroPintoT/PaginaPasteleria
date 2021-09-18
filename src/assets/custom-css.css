@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     margin: 0px;
     background-image: url('./media/fondo-hojas.png');
@@ -8,15 +12,16 @@ body {
 }
 
 .video-banner {
-    max-height: 101vh;
-    height: 101vh;
+    max-height: 100vh;
+    height: 100vh;
     width: 100vw;
-    transform: translate(-1px, -1px)
 }
 
 .dim-logo {
-    height: 2rem;
-    width: 2rem;
+    min-height: 3rem !important;
+    max-height: 3rem !important;
+    min-width: 3rem !important;
+    max-width: 3rem !important;
 }
 
 .text-block {
@@ -27,18 +32,51 @@ body {
     text-align: center !important;
 }
 
+.text-block-nosotros {
+    background-color: rgba(255, 255, 255, 1) !important;
+    color: black !important;
+    padding: 0px !important;
+}
+
 .tb-center {
-    top: 30%;
-    bottom: 30%;
+    top: 40%;
+    bottom: 40%;
     left: 30%;
     right: 30%;
 }
 
-.center-item-vert {
+.tb-center-nosotros {
+    top: 30%;
+    bottom: 30%;
+    left: 50%;
+    right: 0%;
+}
+
+.center-item {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.center-item-hor {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.center-item-vert {
+    position: relative;
+    top: 50%;
+    transform: translate(0%, -50%);
+}
+
+.center-item-vert-nos {
+    position: absolute;
+    top: 50%;
+    left: 3%;
+    right: 3%;
+    transform: translate(0%, -50%);
 }
 
 .div-sep-20per {
@@ -50,10 +88,11 @@ body {
 }
 
 .dim-img-card {
-    min-width: 16rem !important;
-    max-width: 19rem;
-    min-height: 22rem;
-    max-height: 22rem;
+    min-width: 17rem !important;
+    max-width: 17rem;
+    min-height: 27rem;
+    max-height: 27rem;
+    margin: 10px 10px 10px 10px;
 }
 
 .no-select {
@@ -66,7 +105,7 @@ body {
 }
 
 .fondo {
-    /*background: rgba(0, 0, 0, 0.75);*/
+    background-image: url('./media/fondo-hojas.png');
 }
 
 .boton-grande {
@@ -82,6 +121,10 @@ body {
     margin: 0 0 0 0;
 }
 
+.header {
+    width: 100vw;
+}
+
 .centrar {
     top: 50%;
     left: 50%;
@@ -95,7 +138,6 @@ body {
 
 .centra-txt {
     text-align: center;
-    background-image: url('./media/fondo-hojas.png');
 }
 
 .quita-margen {
@@ -109,26 +151,83 @@ body {
 .img-detalle-producto {
     min-width: 100%;
     max-width: 100%;
+    max-height: 300px;
     padding: 0rem 0px 1rem 0px;
 }
 
 .custom-card {
-    cursor: pointer;
     left: 50%;
     transform: translateX(-50%);
 }
 
-:is(h1, h2, h3, h4, h5, h6) {
-    font-family: "Architects Daughter", sans-serif;
-    text-shadow: 1px 1px 1px #0a0a0a;
+.puntero {
+    cursor: pointer;
+    transition: transform 0.2s;
 }
 
-@media only screen and (max-width: 1000px) {
+.puntero:hover {
+    border: black 1px solid;
+    /*-webkit-animation: scale-up-center 0.2s ease-out both;
+	        animation: scale-up-center 0.2s ease-out both;*/
+    transform: scale(1.1)
+}
+
+.texto-video {
+    font-size: 1.2rem;
+}
+
+.texto-detalle {
+    font-size: 1.5rem;
+}
+
+.div-sep-nos {
+    padding: 2rem 0px 2rem 0px;
+    width: 50%;
+}
+
+.caja-shadow {
+    border: 1px solid;
+    border-radius: 20px;
+    box-shadow: 0px 0px 5px 0px gray;
+}
+
+:is(h1, h2, h3, h4, h5, h6) {
+    font-family: "Architects Daughter", sans-serif;
+    /*text-shadow: 1px 1px 1px #0a0a0a;*/
+}
+
+:is(p, button, label, span) {
+    font-family: "Cormorant Garamond", sans-serif;
+    font-size: 1rem;
+}
+
+@media only screen and (max-width: 1350px) {
+    .tb-center {
+        top: 25%;
+        bottom: 25%;
+        left: 30%;
+        right: 30%;
+    }
+}
+
+@media all and (min-width: 1000px) and (orientation: portrait) {
+    .tb-center {
+        top: 30%;
+        bottom: 30%;
+        left: 20%;
+        right: 20%;
+    }
+
+    .texto-video {
+        font-size: 2.5rem !important;
+    }
+}
+
+@media all and (max-width: 1000px) {
     .center-item-vert {
-        position: absolute;
+        position: relative;
         top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(0%, -50%);
     }
 
     .text-block {
@@ -140,8 +239,8 @@ body {
     }
     
     .tb-center {
-        top: 20%;
-        bottom: 20%;
+        top: 30%;
+        bottom: 30%;
         left: 20%;
         right: 20%;
     }
@@ -157,17 +256,48 @@ body {
     }
 
     .dim-logo {
-        height: 100%;
-        width: 100%;
+        min-height: 3rem !important;
+        max-height: 3rem !important;
+        min-width: 3rem !important;
+        max-width: 3rem !important;
     }
 }
 
-@media only screen and (max-width: 600px) {
+@media all and (max-width: 800px) and (orientation: landscape) {
+    .tb-center {
+        top: 30%;
+        bottom: 10%;
+        left: 10%;
+        right: 10%;
+    }
+}
+
+@media all and (min-width: 700px) and (orientation: portrait) {
+    .texto-video {
+        font-size: 1.2rem;
+    }
+}
+
+@media all and (min-width: 700px) and (orientation: portrait) {
+    .texto-video {
+        font-size: 1.8rem;
+    }
+}
+
+@media all and (max-width: 700px) and (orientation: landscape) {
+    .tb-center {
+        top: 30%;
+        bottom: 10%;
+        left: 5%;
+        right: 5%;
+    }
+}
+
+@media all and (max-width: 450px) {
     .center-item-vert {
-        position: absolute;
+        position: relative;
         top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(0%, -50%);
     }
 
     .text-block {
@@ -179,8 +309,8 @@ body {
     }
     
     .tb-center {
-        top: 15%;
-        bottom: 15%;
+        top: 30%;
+        bottom: 30%;
         left: 10%;
         right: 10%;
     }
@@ -190,5 +320,19 @@ body {
         max-width: 90%;
         font-size: 1.5rem !important;
         margin: 1rem 1rem 1rem 1rem;
+    }
+
+    .header ul li a {
+        padding-left: 0.2rem !important;
+        padding-right: 0.2rem !important;
+    }
+}
+
+@media all and (max-width: 350px) {
+    .tb-center {
+        top: 25%;
+        bottom: 25%;
+        left: 10%;
+        right: 10%;
     }
 }

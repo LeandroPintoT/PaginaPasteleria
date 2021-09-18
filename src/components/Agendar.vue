@@ -16,7 +16,6 @@
                             v-model="form.nombre"
                             placeholder="Ej. Pablo Pizarro"
                             required
-                            autofocus
                         ></b-form-input>
                     </b-form-group>
                     <b-form-group
@@ -58,13 +57,20 @@
                             placeholder="No se ha seleccionado una fecha"
                             required
                         ></b-form-datepicker>
+                        <b-form-select
+                            id="input-5-1"
+                            v-model="form.hora"
+                            :options="horasValidas"
+                            value-field="value"
+                            text-field="text"
+                        >Seleccione una hora</b-form-select>
                     </b-form-group>
                     <b-form-group
                         id="input-group-4"
-                        label="Pedido:"
+                        label="Productos (máximo 3):"
                         label-for="input-4"
                     >
-                        <b-row v-bind:key="'select-' + key" v-for="(key) in range(pedidoaux.length)">
+                        <b-row v-bind:key="'select-' + key" v-for="(key) in range(clamp(pedidoaux.length, 1, 3))">
                             <b-col>
                                 <b-form-select
                                     :id="'input-4-' + key"
@@ -75,6 +81,14 @@
                                     disabled-field="notEnabled"
                                     @change="quitaElegido"
                                 >Seleccione un producto</b-form-select>
+                            </b-col>
+                            <b-col cols="2" v-if="pedidoaux[key] && pedidoaux[key] != 9999">
+                                <b-form-spinbutton
+                                    :id="'spin_' + key"
+                                    v-model="form.cantidades[key]"
+                                    min="1"
+                                    max="20"
+                                ></b-form-spinbutton>
                             </b-col>
                             <b-col cols="1" v-if="pedidoaux[key]">
                                 <b-button variant="danger" @click="quitaElegidoBtn(key)">X</b-button>
@@ -122,20 +136,27 @@ export default {
                 email: '',
                 telefono: '',
                 pedido: [null],
-                fecha: '',
+                cantidades: [1],
+                fecha: null,
+                hora: '13:00',
                 comentario: '',
             },
             pedidoaux: [null],
             show: true,
             datemin: null,
             datemax: null,
-            nombresProductos: [{ value: null, text: 'Selecciona un producto', notEnabled: false }],
+            nombresProductos: [{ value: null, text: 'Selecciona un producto', notEnabled: false },
+                               { value: 9999, text: 'Pedido personalizado', notEnabled: false }],
+            horasValidas: [ '10:00', '10:30', '11:00', '11:30', '12:00',
+                            '12:30', '13:00', '13:30', '14:00', '14:30',
+                            '15:00', '15:30', '16:00', '16:30', '17:00',
+                            '17:30', '18:00', '18:30']
         }
     },
     created() {
         /* SETEA LA FECHA MINIMA Y MÁXIMA DEL DATEPICKER */
         let now = new Date()
-        this.datemin = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1)
+        this.datemin = new Date(now.getFullYear(), now.getMonth(), now.getHours()+1 > 20 ? now.getDate()+2 : now.getDate()+1)
         this.datemax = new Date(this.datemin.getFullYear(), this.datemin.getMonth() + 1, this.datemin.getDate())
     },
     mounted() {
@@ -143,6 +164,7 @@ export default {
         axios.get(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/nombreproductos', {
                 params: {}
         }).then((res) => {
+            console.log(res.data)
             if (res.data.sNumError === '0') {
                 for (let data of res.data['data']) {
                     this.nombresProductos.push({ value: data.nidproducto, text: data.snombreproducto, notEnabled: false })
@@ -154,6 +176,8 @@ export default {
         enviarFormulario (event) {
             event.preventDefault()
             this.form.pedido = this.pedidoaux.filter((elem) => elem)
+            this.form.cantidades = this.form.cantidades.filter((elem) => elem != 0)
+            console.log(this.form)
             if (!this.form.fecha) {
                 Swal.fire({
                     position: 'center',
@@ -172,6 +196,7 @@ export default {
                 })
             } else {
                 this.form.pedido = this.form.pedido.join(',')
+                this.form.cantidades = this.form.cantidades.join(',')
                 let data = qs.stringify(this.form)
                 axios.post(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/agendapedido', data).then((res) => {
                     if (res.data['sNumError'] === '0') {
@@ -194,6 +219,14 @@ export default {
                             showConfirmButton: true
                         })
                     }
+                }).catch((err) => {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        title: '¡Error!',
+                        text: 'Ocurrió un error de comunicación con el servidor.' + err,
+                        showConfirmButton: true
+                    })
                 })
             }
         },
@@ -208,7 +241,9 @@ export default {
             this.form.email = ''
             this.form.telefono = ''
             this.form.fecha = null
+            this.form.hora = '13:00'
             this.pedidoaux = [null]
+            this.form.cantidades = [1]
             this.quitaElegido()
             // Trick to reset/clear native browser form validation state
             this.show = false
@@ -217,9 +252,13 @@ export default {
             })
         },
         quitaElegido () {
-            if (this.pedidoaux.some((elem) => !elem))
-                this.pedidoaux = this.pedidoaux.filter((elem) => elem)
-
+            for (let id in this.pedidoaux) {
+                if (!this.pedidoaux[id]) {
+                    this.form.cantidades[id] = 0
+                }
+            }
+            this.pedidoaux = this.pedidoaux.filter((elem) => elem)
+            this.form.cantidades = this.form.cantidades.filter((elem) => elem != 0)
             for (let key in this.nombresProductos) {
                 if (this.pedidoaux.includes(this.nombresProductos[key].value)) {
                     this.nombresProductos[key].notEnabled = true
@@ -227,20 +266,15 @@ export default {
                     this.nombresProductos[key].notEnabled = false
                 }
             }
-            if (this.pedidoaux.length === 0 || this.pedidoaux[this.pedidoaux.length - 1])
+            if (this.pedidoaux.length === 0 || this.pedidoaux[this.pedidoaux.length - 1]) {
                 this.pedidoaux.push(null)
+                this.form.cantidades.push(1)
+            }
         },
         quitaElegidoBtn (id) {
             this.pedidoaux = this.pedidoaux.slice(0, id).concat(this.pedidoaux.slice(id + 1))
-            for (let key in this.nombresProductos) {
-                if (this.pedidoaux.includes(this.nombresProductos[key].value)) {
-                    this.nombresProductos[key].notEnabled = true
-                } else {
-                    this.nombresProductos[key].notEnabled = false
-                }
-            }
-            if (this.pedidoaux.length === 0 || this.pedidoaux[this.pedidoaux.length - 1])
-                this.pedidoaux.push(null)
+            this.form.cantidades = this.form.cantidades.slice(0, id).concat(this.form.cantidades.slice(id + 1))
+            this.quitaElegido()
         },
         range (start, stop, step) {
             if (typeof stop == 'undefined') {
@@ -263,6 +297,9 @@ export default {
             }
 
             return result;
+        },
+        clamp (num, min, max) {
+            return num < min ? 0 : (num > max ? max : num)
         },
         formatearTelefono(value) {
             return /^[0-9]*$/i.test(value) ? value : value.slice(0, value.length - 1)

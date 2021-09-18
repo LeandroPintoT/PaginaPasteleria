@@ -4,12 +4,23 @@
         <br>
         <b-row>
             <b-col>
-                <img class="img-detalle-producto" :src="data.srcCard">
-                <p>{{ data.desLargaCard }}</p>
-            </b-col>
-            <b-col>
-                <h4>Contiene:</h4>
-                <p class="quita-margen" v-bind:key="'ingrediente_' + key" v-for="(ing, key) in data.ingredientes.split(',')">{{ ing }}</p>
+                <!--<img class="img-detalle-producto" :src="data.srcCard">-->
+                <b-carousel
+                    id="carousel-1"
+                    :interval="4000"
+                    controls
+                    indicators
+                    background="#ababab"
+                    img-width="300"
+                    img-height="200"
+                >
+                    <b-carousel-slide
+                        v-bind:key="'slide_' + key"
+                        v-for="(src, key) in data.srcCard"
+                        :img-src="src"
+                    ></b-carousel-slide>
+                </b-carousel>
+                <p class="texto-detalle"><b>{{ data.desLargaCard }}</b></p>
             </b-col>
         </b-row>
     </b-container>

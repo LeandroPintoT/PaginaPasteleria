@@ -21,8 +21,4 @@ export default {
     text-align: center;
     color: #2c3e50;
 }
-:is(p, button, label) {
-    font-family: "Cormorant Garamond", sans-serif;
-    font-size: 1rem;
-}
 </style>
