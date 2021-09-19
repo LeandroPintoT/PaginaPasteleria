@@ -87,7 +87,8 @@ export default {
     },
     methods: {
         enviarFormulario () {
-            if(this.validarCamposPedido()) {
+            let validado = this.validarCamposPedido()
+            if(validado[0]) {
                 let data = qs.stringify(this.form)
                 axios.post(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/contacto', data).then((res) => {
                     if (res.data['sNumError'] === '0') {
@@ -120,24 +121,34 @@ export default {
                     })
                 })
             } else {
-                console.log('ta mal')
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    title: '¡Cuidado!',
+                    text: 'Ha ingresado información inválida. Corrija el campo ' + validado[1] + '.',
+                    showConfirmButton: true
+                })
             }
         },
         validarCamposPedido () {
-            var lleno = true
-            if(this.nombre === '') {
+            let lleno = true
+            let campo = ''
+            if(this.form.nombre === '') {
                 lleno = false
+                campo = 'nombre'
             }
-            if(!this.validarCorreo()) {
+            if(!this.validarCorreo() && lleno) {
                 lleno = false
+                campo = 'correo'
             }
-            if(this.mensaje === '') {
+            if(this.form.mensaje === '' && lleno) {
                 lleno = false
+                campo = 'mensaje'
             }
             if(lleno) {
-                return true
+                return [true]
             }
-            return false
+            return [false, campo]
         },
         validarCorreo() {
             return /^[a-z0-9][a-z0-9-_]{1,}[a-z0-9-_]@[a-z0-9][a-z0-9-_]{1,61}[a-z0-9]\.[a-z]{2,4}$/i.test(this.form.email)

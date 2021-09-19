@@ -21,6 +21,7 @@
                     ></b-carousel-slide>
                 </b-carousel>
                 <p class="texto-detalle"><b>{{ data.desLargaCard }}</b></p>
+                <p class="texto-detalle"><b>Valor: {{ data.precio }}</b></p>
             </b-col>
         </b-row>
     </b-container>

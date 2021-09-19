@@ -34,6 +34,7 @@ export default {
                 srcsCards: [],
                 ingredientes: [],
                 idsCards: [],
+                precios: [],
             }
         }
     },
@@ -54,6 +55,7 @@ export default {
                     this.dataCards.srcsCards.push(arrutas)
                     this.dataCards.ingredientes.push(data.singredientesproducto)
                     this.dataCards.idsCards.push(data.nidproducto)
+                    this.dataCards.precios.push(data.sprecio)
                 }
             }
         })

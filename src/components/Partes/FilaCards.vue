@@ -15,7 +15,8 @@
                     @click="funcClick(key)"
                 >
                     <b-card-text>
-                        {{ data.desCortaCards[key] }}
+                        {{ data.desCortaCards[key] }} <br>
+                        Valor unitario: ${{ data.precios[key] }}
                     </b-card-text>
                 </b-card>
             </div>
@@ -57,7 +58,8 @@ export default {
                 desLargaCard: null,
                 srcCard: null,
                 ingredientes: null,
-                idCard: null
+                idCard: null,
+                precio: 0,
             }
         }
     },
@@ -78,6 +80,7 @@ export default {
             this.dataClicked.srcCard = this.data.srcsCards[id]
             this.dataClicked.ingredientes = this.data.ingredientes[id]
             this.dataClicked.idCard = id
+            this.dataClicked.precio = this.data.precios[id]
             this.$refs['modal-detalle-prod'].show()
         },
         range(start, stop, step) {

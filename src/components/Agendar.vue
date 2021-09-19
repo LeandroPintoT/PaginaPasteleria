@@ -69,6 +69,7 @@
                         id="input-group-4"
                         label="Productos (máximo 3):"
                         label-for="input-4"
+                        v-if="!isMobile()"
                     >
                         <b-row v-bind:key="'select-' + key" v-for="(key) in range(clamp(pedidoaux.length, 1, 3))">
                             <b-col>
@@ -82,15 +83,46 @@
                                     @change="quitaElegido"
                                 >Seleccione un producto</b-form-select>
                             </b-col>
-                            <b-col cols="2" v-if="pedidoaux[key] && pedidoaux[key] != 9999">
+                            <b-col cols="2" v-if="pedidoaux[key] && pedidoaux[key] != 9999" style="padding: 0px;">
                                 <b-form-spinbutton
                                     :id="'spin_' + key"
-                                    v-model="form.cantidades[key]"
+                                    v-model="auxcantidades[key]"
                                     min="1"
                                     max="20"
                                 ></b-form-spinbutton>
                             </b-col>
                             <b-col cols="1" v-if="pedidoaux[key]">
+                                <b-button variant="danger" @click="quitaElegidoBtn(key)">X</b-button>
+                            </b-col>
+                        </b-row>
+                    </b-form-group>
+                    <b-form-group
+                        id="input-group-4"
+                        label="Productos (máximo 3):"
+                        label-for="input-4"
+                        v-if="isMobile()"
+                    >
+                        <b-row v-bind:key="'select-' + key" v-for="(key) in range(clamp(pedidoaux.length, 1, 3))">
+                            <b-col>
+                                <b-form-select
+                                    :id="'input-4-' + key"
+                                    v-model="pedidoaux[key]"
+                                    :options="nombresProductos"
+                                    value-field="value"
+                                    text-field="text"
+                                    disabled-field="notEnabled"
+                                    @change="quitaElegido"
+                                >Seleccione un producto</b-form-select>
+                            </b-col>
+                            <b-col cols="4" v-if="pedidoaux[key] && pedidoaux[key] != 9999" style="padding: 0px;">
+                                <b-form-spinbutton
+                                    :id="'spin_' + key"
+                                    v-model="auxcantidades[key]"
+                                    min="1"
+                                    max="20"
+                                ></b-form-spinbutton>
+                            </b-col>
+                            <b-col cols="2" v-if="pedidoaux[key]">
                                 <b-button variant="danger" @click="quitaElegidoBtn(key)">X</b-button>
                             </b-col>
                         </b-row>
@@ -142,6 +174,7 @@ export default {
                 comentario: '',
             },
             pedidoaux: [null],
+            auxcantidades: [1],
             show: true,
             datemin: null,
             datemax: null,
@@ -176,7 +209,8 @@ export default {
         enviarFormulario (event) {
             event.preventDefault()
             this.form.pedido = this.pedidoaux.filter((elem) => elem)
-            this.form.cantidades = this.form.cantidades.filter((elem) => elem != 0)
+            this.form.cantidades = this.auxcantidades.filter((elem) => elem != 0)
+            this.form.cantidades = this.auxcantidades.slice(0, this.form.pedido.length)
             console.log(this.form)
             if (!this.form.fecha) {
                 Swal.fire({
@@ -215,7 +249,7 @@ export default {
                             position: 'center',
                             icon: 'error',
                             title: '¡Oops!',
-                            text: 'Ocurrió un error durante el proceso de agendado.',
+                            text: 'Ocurrió un error durante el proceso de agendado. ' + res.data['sMensajeError'],
                             showConfirmButton: true
                         })
                     }
@@ -243,7 +277,8 @@ export default {
             this.form.fecha = null
             this.form.hora = '13:00'
             this.pedidoaux = [null]
-            this.form.cantidades = [1]
+            this.auxcantidades = [1]
+            this.form.comentario = ''
             this.quitaElegido()
             // Trick to reset/clear native browser form validation state
             this.show = false
@@ -254,11 +289,11 @@ export default {
         quitaElegido () {
             for (let id in this.pedidoaux) {
                 if (!this.pedidoaux[id]) {
-                    this.form.cantidades[id] = 0
+                    this.auxcantidades[id] = 0
                 }
             }
             this.pedidoaux = this.pedidoaux.filter((elem) => elem)
-            this.form.cantidades = this.form.cantidades.filter((elem) => elem != 0)
+            this.auxcantidades = this.auxcantidades.filter((elem) => elem != 0)
             for (let key in this.nombresProductos) {
                 if (this.pedidoaux.includes(this.nombresProductos[key].value)) {
                     this.nombresProductos[key].notEnabled = true
@@ -268,12 +303,12 @@ export default {
             }
             if (this.pedidoaux.length === 0 || this.pedidoaux[this.pedidoaux.length - 1]) {
                 this.pedidoaux.push(null)
-                this.form.cantidades.push(1)
+                this.auxcantidades.push(1)
             }
         },
         quitaElegidoBtn (id) {
             this.pedidoaux = this.pedidoaux.slice(0, id).concat(this.pedidoaux.slice(id + 1))
-            this.form.cantidades = this.form.cantidades.slice(0, id).concat(this.form.cantidades.slice(id + 1))
+            this.auxcantidades = this.auxcantidades.slice(0, id).concat(this.auxcantidades.slice(id + 1))
             this.quitaElegido()
         },
         range (start, stop, step) {
@@ -297,6 +332,13 @@ export default {
             }
 
             return result;
+        },
+        isMobile() {
+            if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                return true
+            } else {
+                return false
+            }
         },
         clamp (num, min, max) {
             return num < min ? 0 : (num > max ? max : num)
