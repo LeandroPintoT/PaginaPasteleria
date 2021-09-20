@@ -87,8 +87,10 @@
                                 <b-form-spinbutton
                                     :id="'spin_' + key"
                                     v-model="auxcantidades[key]"
+                                    @change="quitaElegido"
                                     min="1"
                                     max="20"
+                                    wrap
                                 ></b-form-spinbutton>
                             </b-col>
                             <b-col cols="1" v-if="pedidoaux[key]">
@@ -118,8 +120,10 @@
                                 <b-form-spinbutton
                                     :id="'spin_' + key"
                                     v-model="auxcantidades[key]"
+                                    @change="quitaElegido"
                                     min="1"
                                     max="20"
+                                    wrap
                                 ></b-form-spinbutton>
                             </b-col>
                             <b-col cols="2" v-if="pedidoaux[key]">
@@ -140,6 +144,7 @@
                             max-rows="6"
                         ></b-form-textarea>
                     </b-form-group>
+                    <h3>Subtotal: {{ formatoPeso(subtotal) }}</h3>
                     <b-button type="submit" variant="primary">Enviar</b-button>
                     <b-button type="reset" variant="danger">Limpiar</b-button>
                 </b-form>
@@ -172,14 +177,16 @@ export default {
                 fecha: null,
                 hora: '13:00',
                 comentario: '',
+                total: 0,
             },
             pedidoaux: [null],
             auxcantidades: [1],
             show: true,
             datemin: null,
             datemax: null,
-            nombresProductos: [{ value: null, text: 'Selecciona un producto', notEnabled: false },
-                               { value: 9999, text: 'Pedido personalizado', notEnabled: false }],
+            nombresProductos: [{ value: null, text: 'Selecciona un producto', notEnabled: false }],
+            preciosProductos: [],
+            subtotal: 0,
             horasValidas: [ '10:00', '10:30', '11:00', '11:30', '12:00',
                             '12:30', '13:00', '13:30', '14:00', '14:30',
                             '15:00', '15:30', '16:00', '16:30', '17:00',
@@ -197,10 +204,10 @@ export default {
         axios.get(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/nombreproductos', {
                 params: {}
         }).then((res) => {
-            console.log(res.data)
             if (res.data.sNumError === '0') {
                 for (let data of res.data['data']) {
                     this.nombresProductos.push({ value: data.nidproducto, text: data.snombreproducto, notEnabled: false })
+                    this.preciosProductos.push(data.sprecio)
                 }
             }
         })
@@ -211,7 +218,7 @@ export default {
             this.form.pedido = this.pedidoaux.filter((elem) => elem)
             this.form.cantidades = this.auxcantidades.filter((elem) => elem != 0)
             this.form.cantidades = this.auxcantidades.slice(0, this.form.pedido.length)
-            console.log(this.form)
+            this.form.total = this.subtotal
             if (!this.form.fecha) {
                 Swal.fire({
                     position: 'center',
@@ -279,6 +286,7 @@ export default {
             this.pedidoaux = [null]
             this.auxcantidades = [1]
             this.form.comentario = ''
+            this.subtotal = 0
             this.quitaElegido()
             // Trick to reset/clear native browser form validation state
             this.show = false
@@ -304,6 +312,14 @@ export default {
             if (this.pedidoaux.length === 0 || this.pedidoaux[this.pedidoaux.length - 1]) {
                 this.pedidoaux.push(null)
                 this.auxcantidades.push(1)
+            }
+            this.subtotal = 0
+            for (let key in this.nombresProductos) {
+                if (key > 0) {
+                    if (this.pedidoaux.includes(this.nombresProductos[key].value)) {
+                        this.subtotal += parseInt(this.preciosProductos[key - 1] * this.auxcantidades[this.pedidoaux.indexOf(this.nombresProductos[key].value)])
+                    }
+                }
             }
         },
         quitaElegidoBtn (id) {
@@ -345,6 +361,20 @@ export default {
         },
         formatearTelefono(value) {
             return /^[0-9]*$/i.test(value) ? value : value.slice(0, value.length - 1)
+        },
+        formatoPeso(valor) {
+            let cont = 0
+            let num = valor.toString()
+            let strnum = []
+            for (let i of this.range(num.length).reverse()) {
+                if (cont === 3) {
+                    strnum.push('.')
+                    cont = 0
+                }
+                strnum.push(num[i])
+                cont += 1
+            }
+            return strnum.reverse().join('')
         }
     },
     computed: {
@@ -367,7 +397,6 @@ export default {
 }
 
 h1 {
-    font-family: "Sofia", sans-serif;
     text-shadow: 1px 1px 1px #0a0a0a;
     color: green;
 }

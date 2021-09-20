@@ -100,7 +100,6 @@ export default {
 
 <style scoped>
 h1 {
-    font-family: "Architects Daughter", sans-serif;
     text-shadow: 1px 1px 1px #0a0a0a;
     padding: 5rem 0 1rem 0;
     color: green;

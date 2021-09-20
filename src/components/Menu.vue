@@ -68,10 +68,6 @@ export default {
 </script>
 
 <style scope>
-.sep-sup {
-    padding: 5rem 0rem 5rem 0rem;
-}
-
 h1 {
     padding: 1rem 0 3rem 0;
 }
