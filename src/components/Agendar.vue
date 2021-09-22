@@ -45,33 +45,12 @@
                         ></b-form-input>
                     </b-form-group>
                     <b-form-group
-                        id="input-group-5"
-                        label="Fecha de entrega:"
-                        label-for="input-5"
-                    >
-                        <b-form-datepicker
-                            v-model="form.fecha"
-                            :min="datemin"
-                            :max="datemax"
-                            locale="es"
-                            placeholder="No se ha seleccionado una fecha"
-                            required
-                        ></b-form-datepicker>
-                        <b-form-select
-                            id="input-5-1"
-                            v-model="form.hora"
-                            :options="horasValidas"
-                            value-field="value"
-                            text-field="text"
-                        >Seleccione una hora</b-form-select>
-                    </b-form-group>
-                    <b-form-group
                         id="input-group-4"
-                        label="Productos (máximo 3):"
+                        :label="'Productos (máximo ' + this.maxproductos + '):'"
                         label-for="input-4"
                         v-if="!isMobile()"
                     >
-                        <b-row v-bind:key="'select-' + key" v-for="(key) in range(clamp(pedidoaux.length, 1, 3))">
+                        <b-row v-bind:key="'select-' + key" v-for="(key) in range(clamp(pedidoaux.length, 1, this.maxproductos))">
                             <b-col>
                                 <b-form-select
                                     :id="'input-4-' + key"
@@ -100,11 +79,11 @@
                     </b-form-group>
                     <b-form-group
                         id="input-group-4"
-                        label="Productos (máximo 3):"
+                        :label="'Productos (máximo ' + this.maxproductos + '):'"
                         label-for="input-4"
                         v-if="isMobile()"
                     >
-                        <b-row v-bind:key="'select-' + key" v-for="(key) in range(clamp(pedidoaux.length, 1, 3))">
+                        <b-row v-bind:key="'select-' + key" v-for="(key) in range(clamp(pedidoaux.length, 1, this.maxproductos))">
                             <b-col>
                                 <b-form-select
                                     :id="'input-4-' + key"
@@ -133,6 +112,30 @@
                     </b-form-group>
                     <b-form-group
                         id="input-group-5"
+                        label="Fecha de entrega:"
+                        label-for="input-5-1"
+                    >
+                        <b-form-datepicker
+                            id="input-5-1"
+                            v-model="form.fecha"
+                            :min="datemin"
+                            :max="datemax"
+                            locale="es"
+                            placeholder="No se ha seleccionado una fecha"
+                            required
+                        ></b-form-datepicker>
+                        <b-form-select
+                            id="input-5-2"
+                            v-model="form.hora"
+                            :options="horasValidas"
+                            value-field="value"
+                            text-field="text"
+                        >Seleccione una hora</b-form-select>
+                        <span style="color: red">*Recuerda que los pedidos personalizados deben agendarse con 48 horas de anticipación.</span><br>
+                        <span style="color: red">**Después de las 17:00 hrs. solo se podrán agendar pedidos para dos o más días a contar de la fecha actual.</span>
+                    </b-form-group>
+                    <b-form-group
+                        id="input-group-5"
                         label="Comentarios (opcional):"
                         label-for="input-5"
                     >
@@ -144,7 +147,7 @@
                             max-rows="6"
                         ></b-form-textarea>
                     </b-form-group>
-                    <h3>Subtotal: {{ formatoPeso(subtotal) }}</h3>
+                    <h3>Subtotal: ${{ formatoPeso(subtotal) }}</h3>
                     <b-button type="submit" variant="primary">Enviar</b-button>
                     <b-button type="reset" variant="danger">Limpiar</b-button>
                 </b-form>
@@ -184,6 +187,7 @@ export default {
             show: true,
             datemin: null,
             datemax: null,
+            maxproductos: 5,
             nombresProductos: [{ value: null, text: 'Selecciona un producto', notEnabled: false }],
             preciosProductos: [],
             subtotal: 0,
@@ -196,7 +200,7 @@ export default {
     created() {
         /* SETEA LA FECHA MINIMA Y MÁXIMA DEL DATEPICKER */
         let now = new Date()
-        this.datemin = new Date(now.getFullYear(), now.getMonth(), now.getHours()+1 > 20 ? now.getDate()+2 : now.getDate()+1)
+        this.datemin = new Date(now.getFullYear(), now.getMonth(), now.getHours()+1 > 17 ? now.getDate()+2 : now.getDate()+1)
         this.datemax = new Date(this.datemin.getFullYear(), this.datemin.getMonth() + 1, this.datemin.getDate())
     },
     mounted() {
@@ -321,6 +325,14 @@ export default {
                     }
                 }
             }
+            // SETEA LA FECHA MINIMA DEL DATAPICKER
+            let now = new Date()
+            if (this.pedidoaux.includes(9999)) {
+                this.form.fecha = null
+                this.datemin = new Date(now.getFullYear(), now.getMonth(), now.getHours()+1 > 17 ? now.getDate()+3 : now.getDate()+2)
+            } else {
+                this.datemin = new Date(now.getFullYear(), now.getMonth(), now.getHours()+1 > 17 ? now.getDate()+2 : now.getDate()+1)
+            }
         },
         quitaElegidoBtn (id) {
             this.pedidoaux = this.pedidoaux.slice(0, id).concat(this.pedidoaux.slice(id + 1))
@@ -387,7 +399,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
 .cont {
     text-align: left !important;
 }

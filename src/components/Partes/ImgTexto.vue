@@ -101,29 +101,11 @@ export default {
             }
         }
     }
-
 }
 </script>
 
-<style scope>
-.img-custom-right-left {
-    min-width: 10%;
-    max-width: 100%;
-    min-height: 10%;
-    max-height: 100%;
-}
-
-.img-custom-up-down {
-    min-width: 10%;
-    max-width: 100%;
-    min-height: 10%;
-    max-height: 100%;
-}
-
-.img-custom-up-down-mobile {
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100%;
-    max-height: 100%;
+<style scoped>
+p {
+    font-size: 1.3rem;
 }
 </style>

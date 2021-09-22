@@ -16,7 +16,9 @@
                 >
                     <b-card-text>
                         {{ data.desCortaCards[key] }} <br>
-                        Valor unitario: ${{ data.precios[key] }}
+                        <span>Valor: </span>
+                        <span v-bind:key="'valor_' + key" v-for="(valor, key) in data.precios[key].split(',').slice(0, data.precios[key].split(',').length-1)">${{ formatoPeso(valor) }} - </span>
+                        <span v-bind:key="'valor_ult_' + key" v-for="(valor, key) in data.precios[key].split(',').slice(data.precios[key].split(',').length-1)">${{ formatoPeso(valor) }}</span>
                     </b-card-text>
                 </b-card>
             </div>
@@ -105,11 +107,25 @@ export default {
 
             return result;
         },
+        formatoPeso(valor) {
+            let cont = 0
+            let num = valor.toString()
+            let strnum = []
+            for (let i of this.range(num.length).reverse()) {
+                if (cont === 3) {
+                    strnum.push('.')
+                    cont = 0
+                }
+                strnum.push(num[i])
+                cont += 1
+            }
+            return strnum.reverse().join('')
+        }
     }
 
 }
 </script>
 
-<style scope>
+<style scoped>
 
 </style>

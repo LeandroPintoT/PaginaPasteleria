@@ -67,7 +67,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
 h1 {
     padding: 1rem 0 3rem 0;
 }

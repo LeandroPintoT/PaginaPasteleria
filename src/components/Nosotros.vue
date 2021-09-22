@@ -2,6 +2,7 @@
     <div class="sep-sup">
         <!-- El index 1 es la opcion de menu -->
         <Header :navbarindex="3" :principal="false" />
+        <h1>Este es el proyecto</h1>
         <img-texto
             :postxt="'right'"
             :srcimg="require('@a/media/diego-batiendo.jpg')"
@@ -64,6 +65,9 @@ export default {
 }
 </script>
 
-<style scope>
-
+<style scoped>
+h1 {
+    padding-top: 1rem;
+    padding-bottom: 0rem;
+}
 </style>

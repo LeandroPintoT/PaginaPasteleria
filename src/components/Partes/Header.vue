@@ -113,7 +113,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
 .navbar {
     transition: 0.3s all ease-out;
 }

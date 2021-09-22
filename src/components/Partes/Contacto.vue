@@ -15,7 +15,6 @@
                             <span><b>Nombre:</b></span>
                             <b-form-input
                                 :type="'text'"
-                                aria-describedby="nombreHelp"
                                 placeholder="Ej: Benjamín González"
                                 id="nombre"
                                 v-model="form.nombre"></b-form-input>
@@ -27,7 +26,6 @@
                             <span><b>Correo electrónico:</b></span>
                             <b-form-input
                                 :type="'text'"
-                                aria-describedby="emailHelp"
                                 placeholder="Ej: correo@ejemplo.com"
                                 id="email"
                                 v-model="form.email"></b-form-input>
@@ -38,13 +36,11 @@
                         <b-col style="text-align: left">
                             <span><b>Mensaje:</b></span>
                             <b-form-textarea
-                                aria-describedby="mensajeHelp"
                                 placeholder=""
                                 id="mensaje"
                                 v-model="form.mensaje"
-                                rows="5"
-                                max-rows="5"
-                                v-on:keyup.enter="enviarFormulario"></b-form-textarea>
+                                rows="4"
+                                max-rows="5"></b-form-textarea>
                         </b-col>
                     </b-row>
                     <br>
@@ -161,7 +157,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style scoped>
 .img-pedido {
     max-width: 100%;
     max-height: 100%;
