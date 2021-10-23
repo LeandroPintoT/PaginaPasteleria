@@ -3,7 +3,7 @@
         <div class="div-sep-20per" />
         <b-navbar-nav>
             <b-navbar-brand class="no-select">
-                <b-row>
+                <b-row @click="irA('principal')" class="manito">
                     <b-col class="quita-padding quita-margen" align-self="center">
                         <img src="@a/logo.png" class="dim-logo">
                     </b-col>

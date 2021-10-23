@@ -62,7 +62,7 @@ export default {
     },
     mounted() {
         window.scrollTo(0, 0)
-        axios.get(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/prodsdestacados', {
+        axios.get((this.server_ip != 'www.cuartodulce.cl' ? (this.server_ip + (this.server_port ? (':' + this.server_port) : '')) : '') + '/api/prodsdestacados', {
                 params: {}
         }).then((res) => {
             if (res.data.sNumError === '0') {

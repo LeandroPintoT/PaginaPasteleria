@@ -85,36 +85,50 @@ export default {
         enviarFormulario () {
             let validado = this.validarCamposPedido()
             if(validado[0]) {
-                let data = qs.stringify(this.form)
-                axios.post(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/contacto', data).then((res) => {
-                    if (res.data['sNumError'] === '0') {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Su mensaje fue enviado correctamente',
-                            text: '¡Gracias por interesarse por nosotros! Pronto recibirá un correo con la respuesta a su mensaje.',
-                            confirmButtonColor: '#3085d6',
-                            showConfirmButton: true
-                        }).then(() => {
-                            this.limpiarCampos()
-                        })
-                    } else {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'error',
-                            title: '¡Oops!',
-                            text: 'Ocurrió un error durante el proceso de contacto. Error: ' + res.data['sMensajeError'],
-                            showConfirmButton: true
+                Swal.fire({
+                    position: 'center',
+                    icon: 'question',
+                    title: 'Confirmación',
+                    text: '¿Son correctos los datos ingresados?',
+                    confirmButtonColor: '#3085d6',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Enviar',
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar'
+                }).then((res) => {
+                    if (res.isConfirmed) {
+                        let data = qs.stringify(this.form)
+                        axios.post((this.server_ip != 'www.cuartodulce.cl' ? (this.server_ip + (this.server_port ? (':' + this.server_port) : '')) : '') + '/api/contacto', data).then((res) => {
+                            if (res.data['sNumError'] === '0') {
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: 'Su mensaje fue enviado correctamente',
+                                    text: '¡Gracias por interesarse por nosotros! Pronto recibirá un correo con la respuesta a su mensaje.',
+                                    confirmButtonColor: '#3085d6',
+                                    showConfirmButton: true
+                                }).then(() => {
+                                    this.limpiarCampos()
+                                })
+                            } else {
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: '¡Oops!',
+                                    text: 'Ocurrió un error durante el proceso de contacto. Error: ' + res.data['sMensajeError'],
+                                    showConfirmButton: true
+                                })
+                            }
+                        }).catch((err) => {
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                title: '¡Error!',
+                                text: 'Ocurrió un error de comunicación con el servidor.' + err,
+                                showConfirmButton: true
+                            })
                         })
                     }
-                }).catch((err) => {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: '¡Error!',
-                        text: 'Ocurrió un error de comunicación con el servidor.' + err,
-                        showConfirmButton: true
-                    })
                 })
             } else {
                 Swal.fire({
@@ -148,6 +162,11 @@ export default {
         },
         validarCorreo() {
             return /^[a-z0-9][a-z0-9-_]{1,}[a-z0-9-_]@[a-z0-9][a-z0-9-_]{1,61}[a-z0-9]\.[a-z]{2,4}$/i.test(this.form.email)
+        },
+        limpiarCampos() {
+            this.form.nombre = ''
+            this.form.email = ''
+            this.form.mensaje = ''
         }
     },
     computed: {

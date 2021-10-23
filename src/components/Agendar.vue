@@ -205,7 +205,7 @@ export default {
     },
     mounted() {
         window.scrollTo(0, 0)
-        axios.get(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/nombreproductos', {
+        axios.get((this.server_ip != 'www.cuartodulce.cl' ? (this.server_ip + (this.server_port ? (':' + this.server_port) : '')) : '') + '/api/nombreproductos', {
                 params: {}
         }).then((res) => {
             if (res.data.sNumError === '0') {
@@ -240,38 +240,52 @@ export default {
                     showConfirmButton: true
                 })
             } else {
-                this.form.pedido = this.form.pedido.join(',')
-                this.form.cantidades = this.form.cantidades.join(',')
-                let data = qs.stringify(this.form)
-                axios.post(this.server_ip + (this.server_port ? (':' + this.server_port) : '') + '/api/agendapedido', data).then((res) => {
-                    if (res.data['sNumError'] === '0') {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Agendado exitósamente',
-                            html: '<p>Su pedido fue realizado con éxito.</p><p><b>Se le enviará un correo con las instrucciones de pago.</b></p>',
-                            confirmButtonColor: '#3085d6',
-                            showConfirmButton: true
-                        }).then(() => {
-                            this.limpiarCampos()
-                        })
-                    } else {
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'error',
-                            title: '¡Oops!',
-                            text: 'Ocurrió un error durante el proceso de agendado. ' + res.data['sMensajeError'],
-                            showConfirmButton: true
+                Swal.fire({
+                    position: 'center',
+                    icon: 'question',
+                    title: 'Confirmación',
+                    text: '¿Son correctos los datos ingresados?',
+                    confirmButtonColor: '#3085d6',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Enviar',
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar'
+                }).then((res) => {
+                    if (res.isConfirmed) {
+                        this.form.pedido = this.form.pedido.join(',')
+                        this.form.cantidades = this.form.cantidades.join(',')
+                        let data = qs.stringify(this.form)
+                        axios.post((this.server_ip != 'www.cuartodulce.cl' ? (this.server_ip + (this.server_port ? (':' + this.server_port) : '')) : '') + '/api/agendapedido', data).then((res) => {
+                            if (res.data['sNumError'] === '0') {
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: 'Agendado exitósamente',
+                                    html: '<p>Su pedido fue realizado con éxito.</p><p><b>Se le enviará un correo con las instrucciones de pago.</b></p>',
+                                    confirmButtonColor: '#3085d6',
+                                    showConfirmButton: true
+                                }).then(() => {
+                                    this.limpiarCampos()
+                                })
+                            } else {
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'error',
+                                    title: '¡Oops!',
+                                    text: 'Ocurrió un error durante el proceso de agendado. ' + res.data['sMensajeError'],
+                                    showConfirmButton: true
+                                })
+                            }
+                        }).catch((err) => {
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'error',
+                                title: '¡Error!',
+                                text: 'Ocurrió un error de comunicación con el servidor.' + err,
+                                showConfirmButton: true
+                            })
                         })
                     }
-                }).catch((err) => {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'error',
-                        title: '¡Error!',
-                        text: 'Ocurrió un error de comunicación con el servidor.' + err,
-                        showConfirmButton: true
-                    })
                 })
             }
         },
