@@ -45,6 +45,18 @@
                         ></b-form-input>
                     </b-form-group>
                     <b-form-group
+                        id="input-group-8"
+                        label="Dirección de entrega:"
+                        label-for="input-8"
+                    >
+                        <b-form-input
+                            id="input-8"
+                            v-model="form.direccion"
+                            placeholder="Ej. Calle 4, 123, Viña del Mar"
+                            required
+                        ></b-form-input>
+                    </b-form-group>
+                    <b-form-group
                         id="input-group-4"
                         :label="'Productos (máximo ' + this.maxproductos + '):'"
                         label-for="input-4"
@@ -78,15 +90,15 @@
                         </b-row>
                     </b-form-group>
                     <b-form-group
-                        id="input-group-4"
+                        id="input-group-7"
                         :label="'Productos (máximo ' + this.maxproductos + '):'"
-                        label-for="input-4"
+                        label-for="input-7"
                         v-if="isMobile()"
                     >
                         <b-row v-bind:key="'select-' + key" v-for="(key) in range(clamp(pedidoaux.length, 1, this.maxproductos))">
                             <b-col>
                                 <b-form-select
-                                    :id="'input-4-' + key"
+                                    :id="'input-7-' + key"
                                     v-model="pedidoaux[key]"
                                     :options="nombresProductos"
                                     value-field="value"
@@ -124,23 +136,16 @@
                             placeholder="No se ha seleccionado una fecha"
                             required
                         ></b-form-datepicker>
-                        <b-form-select
-                            id="input-5-2"
-                            v-model="form.hora"
-                            :options="horasValidas"
-                            value-field="value"
-                            text-field="text"
-                        >Seleccione una hora</b-form-select>
-                        <span style="color: red">*Recuerda que los pedidos personalizados deben agendarse con 48 horas de anticipación.</span><br>
+                        <span style="color: red">*Los pedidos personalizados deben agendarse con 48 horas de anticipación.</span><br>
                         <span style="color: red">**Después de las 17:00 hrs. solo se podrán agendar pedidos para dos o más días a contar de la fecha actual.</span>
                     </b-form-group>
                     <b-form-group
-                        id="input-group-5"
+                        id="input-group-6"
                         label="Comentarios (opcional):"
-                        label-for="input-5"
+                        label-for="input-6"
                     >
                         <b-form-textarea
-                            id="input-5"
+                            id="input-6"
                             v-model="form.comentario"
                             placeholder="Escriba algo..."
                             rows="3"
@@ -175,10 +180,10 @@ export default {
                 nombre: '',
                 email: '',
                 telefono: '',
+                direccion: '',
                 pedido: [null],
                 cantidades: [1],
                 fecha: null,
-                hora: '13:00',
                 comentario: '',
                 total: 0,
             },
@@ -191,10 +196,6 @@ export default {
             nombresProductos: [{ value: null, text: 'Selecciona un producto', notEnabled: false }],
             preciosProductos: [],
             subtotal: 0,
-            horasValidas: [ '10:00', '10:30', '11:00', '11:30', '12:00',
-                            '12:30', '13:00', '13:30', '14:00', '14:30',
-                            '15:00', '15:30', '16:00', '16:30', '17:00',
-                            '17:30', '18:00', '18:30']
         }
     },
     created() {
@@ -299,8 +300,8 @@ export default {
             this.form.nombre = ''
             this.form.email = ''
             this.form.telefono = ''
+            this.form.direccion = ''
             this.form.fecha = null
-            this.form.hora = '13:00'
             this.pedidoaux = [null]
             this.auxcantidades = [1]
             this.form.comentario = ''
